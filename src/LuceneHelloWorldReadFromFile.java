@@ -35,8 +35,8 @@ public class LuceneHelloWorldReadFromFile {
 
 	public static void main(String[] args) throws IOException, ParseException {
 
-		String textDir = "/home/arj/Documents/CSQ/MRT/Assignment5/text";
-		String indexDir = "/home/arj/Documents/CSQ/MRT/Assignment5/textindex";
+		String textDir = ""; //your path to input directory which contains .txt files for indexing
+		String indexDir = ""; //your path to output directory which stores indexes
 //		textFilesIndexer(textDir,	indexDir);
 		textQuerySearcher(indexDir, "python");
 		
