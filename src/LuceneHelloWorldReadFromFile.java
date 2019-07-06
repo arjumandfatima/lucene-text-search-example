@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class LuceneHelloWorldReadFromFile {
 		String textDir = "/home/arj/Documents/CSQ/MRT/Assignment5/text";
 		String indexDir = "/home/arj/Documents/CSQ/MRT/Assignment5/textindex";
 //		textFilesIndexer(textDir,	indexDir);
-		textQuerySearcher(indexDir, "hello");
+		textQuerySearcher(indexDir, "python");
 		
 		
 		
@@ -66,7 +68,7 @@ public class LuceneHelloWorldReadFromFile {
 		 TopDocs results = null;
 		 
 		 // search for a value not indexed 
-		 try { query = parser.parse("network"); }
+		 try { query = parser.parse(queryText); }
 		 catch (org.apache.lucene.queryparser.classic.ParseException e) { 
 			 // TODO 		 Auto-generated  			 catch block
 			 e.printStackTrace(); 
@@ -77,16 +79,17 @@ public class LuceneHelloWorldReadFromFile {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		 System.out.println("Hits for Hi there -->" + results.totalHits);
-		 System.out.println("Hits for Hi there scoredocs-->" + results.scoreDocs.length);
-		 System.out.println("Hits for Hi there scoredocs-->" + results.scoreDocs[0]);
-			try {
-				System.out.println("Hits for Hi there scoredocs-->" + searcher.doc( results.scoreDocs[0].doc).get("filename"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
+		 System.out.println("Hits for  "+queryText +"----> "+ results.totalHits);
+		 if( results.scoreDocs.length >0) {
+			 
+			 System.out.println("Details of Hits for  "+queryText +"----> "+ results.scoreDocs[0]);
+			 			try {
+					System.out.println("Top filename for  "+queryText +"----> "+ searcher.doc( results.scoreDocs[0].doc).get("filename"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			 }
 
 
 	}
@@ -126,9 +129,10 @@ public class LuceneHelloWorldReadFromFile {
 
 				try (BufferedReader br = new BufferedReader(new FileReader(file.getAbsolutePath()))) {
 
-					
+					Reader inputString = new StringReader(br.toString().toLowerCase().replaceAll("\\s", ""));
+					BufferedReader reader = new BufferedReader(inputString);
 					  document.add(
-						      new TextField("contents", br));
+						      new TextField("contents", reader));
 						    document.add(
 						      new StringField("path", file.getPath(), Field.Store.YES));
 						    document.add(
